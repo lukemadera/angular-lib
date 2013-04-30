@@ -32,6 +32,8 @@ supported time formats (used for "inputFormat" fields / passed in params):
 //1.75. breakUpAmount
 */
 
+'use strict';
+
 angular.module('lib.services').
 factory('libDateTime', [function(){
 var inst ={
@@ -289,12 +291,12 @@ var inst ={
 		else if(inputFormat =='month day, year')
 		{
 			input_array = inputDateTime.split(' ');
-			return {'year':input_array[2], 'month':wordToMonth(input_array[0], {'abbrev':false}), 'day':input_array[1].replace(',', ''), 'hour':'00', 'minute':'00', 'second':'00'};
+			return {'year':input_array[2], 'month':this.wordToMonth(input_array[0], {'abbrev':false}), 'day':input_array[1].replace(',', ''), 'hour':'00', 'minute':'00', 'second':'00'};
 		}
 		else if(inputFormat =='mon. day, year')
 		{
 			input_array = inputDateTime.split(' ');
-			return {'year':input_array[2], 'month':wordToMonth(input_array[0], {'abbrev':true}), 'day':input_array[1].replace(',', ''), 'hour':'00', 'minute':'00', 'second':'00'};
+			return {'year':input_array[2], 'month':this.wordToMonth(input_array[0], {'abbrev':true}), 'day':input_array[1].replace(',', ''), 'hour':'00', 'minute':'00', 'second':'00'};
 		}
 		return false;
 	},

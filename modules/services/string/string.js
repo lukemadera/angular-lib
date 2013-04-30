@@ -6,6 +6,8 @@
 //2. random
 */
 
+'use strict';
+
 angular.module('lib.services').
 factory('libString', ['libArray', function(libArray){
 var inst ={

@@ -8,6 +8,8 @@
 //5. scroll
 */
 
+'use strict';
+
 angular.module('lib.services').
 factory('libLoading', [function(){
 var inst ={

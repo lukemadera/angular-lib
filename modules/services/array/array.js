@@ -20,6 +20,8 @@ array remove (extends native javascript array functions)
 //1. findArrayIndex
 */
 
+'use strict';
+
 // Array Remove - By John Resig (MIT Licensed)
 /*
 // Remove the second item from the array
@@ -710,6 +712,7 @@ var inst ={
 	*/
 	valExistsCheck: function(array1, val, params)
 	{
+		var iiDup;
 		var duplicateVal =false;
 		for(iiDup =0; iiDup<array1.length; iiDup++)
 		{

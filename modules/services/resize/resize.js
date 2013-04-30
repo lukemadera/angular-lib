@@ -6,6 +6,8 @@
 //2.5. removeCallback
 */
 
+'use strict';
+
 angular.module('lib.services').
 factory('libResize', ['$rootScope', 'libFxnCallback', 'libArray', function($rootScope, libFxnCallback, libArray){
 var inst ={

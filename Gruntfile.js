@@ -70,6 +70,20 @@ module.exports = function(grunt) {
 			options:{
 				force: true,
 				//sub:true,
+				globalstrict:   true,
+				browser:        true,
+                devel:          true,
+                globals: {
+                    angular:    false,
+                    $:          false,
+					FB:			false,
+					PG:			false,
+					CDV:		false,
+					gapi:		false,
+                    globalPhoneGap: false,		//@todo - fix this?
+					escape: false,		//apparently escape function isn't part of the "standard"
+					unescape: false		//apparently unescape function isn't part of the "standard"
+                }
 			},
 			//beforeconcat: ['common/module.js', 'modules/**/*.js'],
 			beforeconcat: config.lintFiles,

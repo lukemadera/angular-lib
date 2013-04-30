@@ -3,6 +3,8 @@
 //1. setSwipe
 */
 
+'use strict';
+
 angular.module('lib.services').
 factory('libSwipe', ['libFeatureSupported', function(libFeatureSupported){
 var inst ={

@@ -13,7 +13,7 @@ Similar to modernizr but with some additional checks for devices, platforms, and
 //4. update
 */
 
-//'use strict';
+'use strict';
 
 angular.module('lib.services').
 factory('libFeatureSupported', ['libArray', function(libArray){
@@ -174,7 +174,7 @@ var inst ={
 			this.init({});
 		}
 		var valid =false;
-		if(this.html5Support[feature] !=undefind) {
+		if(this.html5Support[feature] !==undefined) {
 			valid =this.html5Support[feature];
 		}
 		return valid;

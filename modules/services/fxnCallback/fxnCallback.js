@@ -3,6 +3,8 @@
 //2. doCallback
 */
 
+'use strict';
+
 angular.module('lib.services').
 factory('libFxnCallback', ['$rootScope', function($rootScope){
 var inst ={

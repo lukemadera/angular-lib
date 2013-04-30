@@ -3,7 +3,7 @@
 //TOC
 */
 
-//'use strict';
+'use strict';
 
 angular.module('lib.services').
 provider('libCookie', [function(){

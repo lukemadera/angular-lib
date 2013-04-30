@@ -7,6 +7,8 @@
 //1. cleanFormVals
 */
 
+'use strict';
+
 angular.module('lib.services').
 factory('libAngular', ['libArray', '$q', '$timeout', function(libArray, $q, $timeout){
 var inst ={
