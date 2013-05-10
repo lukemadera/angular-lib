@@ -3,6 +3,10 @@ Lint, concat, & minify (uglify) process (since ONLY want to lint & minify files 
 1. lint all non-minified (i.e. custom built as opposed to 3rd party) files
 2. minify these custom built files (this also concats them into one)
 3. concat all the (now minified) files - the custom built one AND all existing (3rd party) minified ones
+
+@usage
+`grunt`
+`grunt doubleConcat` to generate non minified version of .js file as well as min.js version
 */
 
 module.exports = function(grunt) {
@@ -19,8 +23,8 @@ module.exports = function(grunt) {
 	config.concatFilesMin =config.concatFilesExt.concat(config.customMinifyFile);
 	config.concatFiles =config.concatFilesExt.concat(config.customFile);
 		
-  // Project configuration.
-  grunt.initConfig({
+	// Project configuration.
+	grunt.initConfig({
 		builddir: 'build',
 		commonDir: 'common',
 		customMinifyFile: config.customMinifyFile,
@@ -41,7 +45,8 @@ module.exports = function(grunt) {
 			},
 			doubleConcat: {
 				src: config.lintFiles,
-				dest: '<%= customFile %>'
+				//dest: '<%= customFile %>'
+				dest: '<%= builddir %>/<%= pkg.name %>.js'
 			},
 			doubleConcatAfterMin: {
 				//src: config.concatFiles,
@@ -70,43 +75,43 @@ module.exports = function(grunt) {
 			options:{
 				force: true,
 				//sub:true,
-				globalstrict:   true,
-				browser:        true,
-                devel:          true,
-                globals: {
-                    angular:    false,
-                    $:          false,
+				globalstrict:	true,
+				browser:		true,
+				devel:			true,
+				globals: {
+					angular:	false,
+					$:			false,
 					FB:			false,
 					PG:			false,
 					CDV:		false,
 					gapi:		false,
-                    globalPhoneGap: false,		//@todo - fix this?
-					escape: false,		//apparently escape function isn't part of the "standard"
-					unescape: false		//apparently unescape function isn't part of the "standard"
-                }
+					globalPhoneGap:	false,		//@todo - fix this?
+					escape:		false,		//apparently escape function isn't part of the "standard"
+					unescape:	false		//apparently unescape function isn't part of the "standard"
+				}
 			},
 			//beforeconcat: ['common/module.js', 'modules/**/*.js'],
 			beforeconcat: config.lintFiles,
 			afterconcat: ['<%= builddir %>/<%= pkg.name %>.js']
 		},
-    uglify: {
-      options: {
-        //banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+		uglify: {
+			options: {
+				//banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
 				mangle: false
 				//beautify:true
-      },
-      build: {
-        files: {
+			},
+			build: {
+				files: {
 					//'<%= builddir %>/<%= pkg.name %>.min.js': ['<%= builddir %>/<%= pkg.name %>.js']
 					'<%= customMinifyFile %>': config.lintFiles
 				}
-      },
+			},
 			doubleConcat:{
 				files: {
 					'<%= customMinifyFile %>': ['<%= customFile %>']
 				}
 			}
-    },
+		},
 		cssmin: {
 			build: {
 				files: {
@@ -114,21 +119,22 @@ module.exports = function(grunt) {
 				}
 			},
 		}
-  });
+	});
 
-  // Load the plugin that provides the "uglify" task.
+	// Load the plugin that provides the "uglify" task.
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	//grunt.loadNpmTasks('grunt-contrib-compass');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 
-  // Default task(s).
+	// Default task(s).
 	grunt.registerTask('default', ['jshint:beforeconcat', 'uglify:build', 'less:dev', 'concat:buildJs', 'cssmin:build']);
 	//grunt.registerTask('default', ['concat:buildJs', 'less:dev', 'jshint:beforeconcat', 'uglify:build', 'cssmin:build']);
 	//grunt.registerTask('default', ['concat:buildJs', 'less:dev', 'jshint:afterconcat']);
 	//grunt.registerTask('default', ['concat:buildJs', 'less:dev', 'jshint:beforeconcat']);
 	
+	//build non-minified version of js file as well as minified version
 	grunt.registerTask('doubleConcat', ['jshint:beforeconcat', 'concat:doubleConcat', 'uglify:doubleConcat', 'concat:doubleConcatAfterMin', 'less:dev', 'cssmin:build']);
 };

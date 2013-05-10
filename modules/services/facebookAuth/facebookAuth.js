@@ -262,13 +262,9 @@ var inst ={
 		
 		var argsToAdd =[this.fbCookie];
 		var args =libFxnCallback.formArgs({'args':params.callback.args, 'argsToAdd':argsToAdd});
+		$rootScope.$broadcast(params.callback.evtName, args);
 		if(!$rootScope.$$phase) {		//if not already in apply / in Angular world
-			$rootScope.$apply(function() {
-				$rootScope.$broadcast(params.callback.evtName, args);
-			});
-		}
-		else {
-			$rootScope.$broadcast(params.callback.evtName, args);
+			$rootScope.$apply();
 		}
 	}
 	
