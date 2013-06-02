@@ -1,5 +1,6 @@
 /**
 //TOC
+//5. parseUrl
 //4. addFileSuffix
 //3. escapeHtml
 //1. trim
@@ -12,6 +13,53 @@ angular.module('lib.services').
 factory('libString', ['libArray', function(libArray){
 var inst ={
 
+	/**
+	Parses the url to retrieve GET params BEFORE $location.url() is available..
+	Handles hash (#) for non HTML5 History support (so '#/' will be stripped off too - though this may be an AngularJS specific routing solution??)
+	@toc 5.
+	@method parseUrl
+	@param {Object} params
+		@param {String} url The full url to parse
+		@param {String} [rootPath =''] The part to strip off the beginning of the url (i.e. 'static/public/')
+	@return {Object} A parsed section of the current url, i.e. for a url of: 'http://localhost/static/public/home?p1=yes&p2=no'
+		@param {String} page The current url WITHOUT url GET params and WITHOUT the root path, i.e. 'home'
+		@param {String} queryParams The GET params, i.e. 'p1=yes&p2=no'
+	*/
+	parseUrl: function(params) {
+		var ret ={page: '', queryParams: ''};
+		var defaults ={rootPath: ''};
+		var xx;
+		for(xx in defaults) {
+			if(params[xx] ===undefined) {
+				params[xx] =defaults[xx];
+			}
+		}
+		
+		var appPath =params.rootPath;
+		var curUrl =params.url;
+		//strip off host info (in case rootPath is just '/', don't want to match the slash in the host/protocol info)
+		var posSlashes =curUrl.indexOf('://');
+		curUrl =curUrl.slice(posSlashes+3, curUrl.length);
+		
+		var pos1 =curUrl.indexOf(appPath);
+		var curPage =curUrl.slice((pos1+appPath.length), curUrl.length);
+		//handle non HTML5 history by stripping off leading '#/'
+		var posHash =curPage.indexOf("#/");
+		if(posHash >-1) {
+			curPage =curPage.slice((posHash+2), curPage.length);
+		}
+		var posQuery =curPage.indexOf("?");
+		var queryParams ='';
+		if(posQuery >-1) {
+			queryParams =curPage.slice((posQuery), curPage.length);
+			curPage =curPage.slice(0, posQuery);
+		}
+		
+		ret.page =curPage;
+		ret.queryParams =queryParams;
+		return ret;
+	},
+	
 	//4.
 	/*
 	@param filename =string (i.e. 'test.jpg')

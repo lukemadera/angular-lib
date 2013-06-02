@@ -1,4 +1,8 @@
 /**
+@todo
+- Make and fix/test build that generates BOTH min and non-min versions (right now can only generate one or the other - and generating the non-min one with `doubleConcat` seems to generate a BAD min version..)
+
+
 Lint, concat, & minify (uglify) process (since ONLY want to lint & minify files that haven't already been minified BUT want concat ALL files (including already minified ones) into ONE final file)
 1. lint all non-minified (i.e. custom built as opposed to 3rd party) files
 2. minify these custom built files (this also concats them into one)
