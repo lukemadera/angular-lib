@@ -90,6 +90,7 @@ module.exports = function(grunt) {
 					CDV:		false,
 					gapi:		false,
 					globalPhoneGap:	false,		//@todo - fix this?
+					google: false,
 					escape:		false,		//apparently escape function isn't part of the "standard"
 					unescape:	false		//apparently unescape function isn't part of the "standard"
 				}

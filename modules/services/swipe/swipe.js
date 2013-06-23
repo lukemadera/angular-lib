@@ -11,11 +11,12 @@ jquery.mobile.events.js
 	@param {Function} onswipe function to call on swiping
 
 @param {Object} attrs REMEMBER: use snake-case when setting these on the partial! i.e. scroll-load='1' NOT scrollLoad='1'
-	@param {Array} directions One or more of 'left', 'right', 'up', 'down' directions to bind swipe events to. The direction will be passed into the onswipe function to differentiate among the different events/directions.
+	@param {String} directions Comma delimited list of one or more of 'left', 'right', 'up', 'down' directions to bind swipe events to. The direction will be passed into the onswipe function to differentiate among the different events/directions.
+		@example 'left,right'
 	
 @example
 partial / html:
-	<div lib-swipe directions='[left]' onswipe='swipeIt'>
+	<div lib-swipe directions='left' onswipe='swipeIt'>
 
 controller / js:
 	@param {Object} params
@@ -41,10 +42,10 @@ angular.module('lib.services')
 			element.attr('id', attrs.id);
 			
 			return function(scope, element, attrs) {
-				var directions =JSON.parse(attrs.directions);
+				var directions =attrs.directions.split(",");
 				
 				function setSwipe(curDirection) {
-					return function() {
+					// return function() {
 						libSwipe.setSwipe(
 							'#'+attrs.id,
 							curDirection,
@@ -56,7 +57,7 @@ angular.module('lib.services')
 								}
 							}
 						);
-					};
+					// };
 				}
 				
 				var ii;
