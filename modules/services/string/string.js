@@ -1,6 +1,7 @@
 /**
 //TOC
 //5. parseUrl
+//5.5. parseUrlParams
 //4. addFileSuffix
 //3. escapeHtml
 //1. trim
@@ -14,7 +15,7 @@ factory('libString', ['libArray', function(libArray){
 var inst ={
 
 	/**
-	Parses the url to retrieve GET params BEFORE $location.url() is available..
+	Parses the url to retrieve GET params BEFORE Angular $location.url() is available..
 	Handles hash (#) for non HTML5 History support (so '#/' will be stripped off too - though this may be an AngularJS specific routing solution??)
 	@toc 5.
 	@method parseUrl
@@ -24,6 +25,7 @@ var inst ={
 	@return {Object} A parsed section of the current url, i.e. for a url of: 'http://localhost/static/public/home?p1=yes&p2=no'
 		@param {String} page The current url WITHOUT url GET params and WITHOUT the root path, i.e. 'home'
 		@param {String} queryParams The GET params, i.e. 'p1=yes&p2=no'
+		@param {Object} queryParamsObj An object version of the GET params, i.e. {p1:'yes', p2:'no'}
 	*/
 	parseUrl: function(params) {
 		var ret ={page: '', queryParams: ''};
@@ -51,13 +53,38 @@ var inst ={
 		var posQuery =curPage.indexOf("?");
 		var queryParams ='';
 		if(posQuery >-1) {
-			queryParams =curPage.slice((posQuery), curPage.length);
+			queryParams =curPage.slice((posQuery+1), curPage.length);
 			curPage =curPage.slice(0, posQuery);
 		}
 		
 		ret.page =curPage;
 		ret.queryParams =queryParams;
+		ret.queryParamsObj =this.parseUrlParams(queryParams, {});
 		return ret;
+	},
+	
+	/**
+	Turns a query string (i.e. '?yes=no&maybe=so') into an object for easier reference
+	@toc 5.5.
+	@param {String} urlParams The query string (i.e. '?yes=no&maybe=so')
+	@param {Object} [params]
+	@return {Object} Key-value pairs for each parameter; i.e. {'yes':'no', 'maybe':'so'}
+	*/
+	parseUrlParams: function(urlParams, params) {
+		//strip out leading question mark, if present
+		var questionMark =urlParams.indexOf("?");
+		if(questionMark >-1) {
+			urlParams =urlParams.slice((questionMark+1), urlParams.length);
+		}
+		
+		var urlParamsObj ={};
+		var parts =urlParams.split('&');
+		var ii, subParts;
+		for(ii =0; ii<parts.length; ii++) {
+			subParts =parts[ii].split('=');
+			urlParamsObj[subParts[0]] =subParts[1];
+		}
+		return urlParamsObj;
 	},
 	
 	//4.
