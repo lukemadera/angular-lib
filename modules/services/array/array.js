@@ -277,6 +277,12 @@ var inst ={
 		if(params.noDotNotation ===undefined || !params.noDotNotation) {
 			params.keys =params.keys.split(".");
 		}
+		
+		//simpler and infinitely nested version from: http://stackoverflow.com/questions/8051975/access-object-child-properties-using-a-dot-notation-string
+		while(params.keys.length && (arrayBase = arrayBase[params.keys.shift()]));
+		return arrayBase;
+		
+		/*
 		if(params.keys.length ==1) {
 			if(arrayBase[params.keys[0]] !==undefined) {
 				retArray.val =arrayBase[params.keys[0]];
@@ -311,7 +317,9 @@ var inst ={
 			retArray.valid =0;
 			retArray.msg ='Too deep / too many keys; can only handle key length up to 6';
 		}
+		
 		return retArray;
+		*/
 	},
 	
 	//9.
