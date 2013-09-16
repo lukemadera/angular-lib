@@ -821,14 +821,21 @@ var inst ={
 	*/
 	sort2D: function(arrayUnsorted, column, params)
 	{
-		var tempArray =[];	//copy calHide array here to sort; then re-copy back into calHide array once sorted
+		var tempArray =[];
+		var tempArrayPart;
 		var array2D =[];
 		var ii;
 		for(ii =0; ii<arrayUnsorted.length; ii++)
 		{
 			tempArray[ii] =[];
 			tempArray[ii] =arrayUnsorted[ii];
-			array2D[ii] =[ii, tempArray[ii][column]];
+			if(column.indexOf('.') >-1) {		//handle nested / dot notation columns
+				tempArrayPart =this.evalArray(tempArray[ii], {'keys':column});
+				array2D[ii] =[ii, tempArrayPart];
+			}
+			else {
+				array2D[ii] =[ii, tempArray[ii][column]];
+			}
 		}
 
 		array2D =this.subSort2D(array2D);		//function		- array2D will come out sorted
