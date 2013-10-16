@@ -2,6 +2,7 @@
 //TOC
 //5. parseUrl
 //5.5. parseUrlParams
+//5.6. stripUrlParams
 //4. addFileSuffix
 //3. escapeHtml
 //1. trim
@@ -85,6 +86,62 @@ var inst ={
 			urlParamsObj[subParts[0]] =subParts[1];
 		}
 		return urlParamsObj;
+	},
+	
+	/**
+	Takes a url and removes one or more parameters and adds a trailing '?' or '&' so more can be added
+	@toc 5.6.
+	@method stripUrlParams
+	@param {String} url The original url (i.e. 'http://domain.com?p1=yes&p2=no&p3=maybe' )
+	@param {Array} stripKeys The params to remove from the url (i.e. ['p2'] )
+	@param {Object} [params]
+		@param {Boolean} [returnParamsOnly] True to return JUST url params (i.e. cut out the domain - i.e. 'http://domain.com' would NOT be present in the returned url)
+	@return {String} newUrl (i.e. 'http://domain.com?p1=yes&p3=maybe&' )
+	*/
+	stripUrlParams: function(url, stripKeys, params) {
+		var newUrl =url;
+		var ii, patt1, patt2, patt3, patt4;
+		
+		//strip out host (everything before leading question mark) since need to add back in question mark later since need to search WITH a leading '?' and '&' otherwise can get improper matches (i.e. 'page' will improperly replace '&editpage=yes' if don't search with the leading character first)
+		var host ='';
+		var questionMark =newUrl.indexOf("?");
+		if(questionMark >-1) {
+			host =newUrl.slice(0, questionMark);
+			newUrl =newUrl.slice((questionMark+0), newUrl.length);
+		}
+			
+		for(ii =0; ii<stripKeys.length; ii++) {
+			//note: order matters here - the last two will match the ENTIRE rest of the string so must only replace AFTER have searched for and replaced it earlier (i.e. before a '&') if it exists there!
+			//must do these first
+			patt1 =new RegExp('\\?'+stripKeys[ii]+'=.*&', 'i');		//for leading (first) parameter with non-ending parameter
+			patt2 =new RegExp('&'+stripKeys[ii]+'=.*&', 'i');		//for all other (non-first) parameters with non-ending parameter
+			//must do these last
+			patt3 =new RegExp('\\?'+stripKeys[ii]+'=.*', 'i');		//for leading (first) parameter
+			patt4 =new RegExp('&'+stripKeys[ii]+'=.*', 'i');		//for all other (non-first) parameters
+			newUrl =newUrl.replace(patt1, '?').replace(patt2, '&').replace(patt3, '?').replace(patt4, '&');
+		}
+		
+		//re-add leading question mark
+		if(newUrl.length >0) {		//if have something left
+			if(newUrl.indexOf('?') <0) {		//if no question mark, replace leading character (must be an '&') with a question mark
+				newUrl ='?'+newUrl.slice(1, newUrl.length);
+			}
+		}
+		
+		//add appropriate trailing character so returned url can be added to without having to figure out if it should be a '?' or a '&'
+		if(newUrl.indexOf('?') <0) {
+			newUrl +='?';
+		}
+		else {
+			newUrl +='&';
+		}
+		
+		if(params.returnParamsOnly ===undefined || !params.returnParamsOnly) {
+			//add back in host
+			newUrl =host+newUrl;
+		}
+		
+		return newUrl;
 	},
 	
 	//4.
