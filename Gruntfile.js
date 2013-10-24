@@ -91,6 +91,7 @@ module.exports = function(grunt) {
 					gapi:		false,
 					globalPhoneGap:	false,		//@todo - fix this?
 					google: false,
+					MarkerWithLabel: false,
 					escape:		false,		//apparently escape function isn't part of the "standard"
 					unescape:	false		//apparently unescape function isn't part of the "standard"
 				}

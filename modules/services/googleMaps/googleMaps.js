@@ -275,7 +275,7 @@ var inst ={
 		}
 		
 		var marker;
-		if(params.opts.labelContent !==undefined) {
+		if(opts.labelContent !==undefined) {
 			marker =new MarkerWithLabel(opts);
 		}
 		else {
