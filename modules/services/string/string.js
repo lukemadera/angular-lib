@@ -97,6 +97,9 @@ var inst ={
 	@param {Object} [params]
 		@param {Boolean} [returnParamsOnly] True to return JUST url params (i.e. cut out the domain - i.e. 'http://domain.com' would NOT be present in the returned url)
 	@return {String} newUrl (i.e. 'http://domain.com?p1=yes&p3=maybe&' )
+	
+	@usage
+	stripUrlParams('http://domain.com?p1=yes&p2=no&p3=maybe', ['p2'], {});
 	*/
 	stripUrlParams: function(url, stripKeys, params) {
 		var newUrl =url;

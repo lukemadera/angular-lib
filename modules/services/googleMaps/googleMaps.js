@@ -242,6 +242,11 @@ var inst ={
 			animation =string of 'drop'
 			draggable =boolean
 			icon =string of image url
+			//marker label options: http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerwithlabel/1.1.9/docs/examples.html. NOTE: this requires the marker label javascript to be included or it won't work!
+			labelContent
+			labelAnchor
+			labelClass
+			labelStyle
 	@return marker =google maps marker object handle
 	*/
 	addMarker: function(gmId, map, params) {
@@ -268,7 +273,14 @@ var inst ={
 				opts.animation =animationMap[opts.animation];
 			}
 		}
-		var marker =new google.maps.Marker(opts);
+		
+		var marker;
+		if(params.opts.labelContent !==undefined) {
+			marker =new MarkerWithLabel(opts);
+		}
+		else {
+			marker =new google.maps.Marker(opts);
+		}
 		
 		if(params.clearEventListener) {
 			//only allow 1 marker (so clear click listener)
