@@ -197,6 +197,11 @@ var inst ={
 			else {
 				thisObj.loginCallback(params);
 			}
+			
+			//get back in angular world (since did Google calls, etc. - without this, nothing will happen!)
+			if(!$rootScope.$$phase) {
+				$rootScope.$apply();
+			}
 		});
 	},
 	
